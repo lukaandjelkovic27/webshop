@@ -34,35 +34,24 @@
                     @include('partials/user-navigation')
                     @endrole
                 @endauth
-                {{--<a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Webshop') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @include('partials/site-navigation')
-                        @endguest
-                        @auth
-                            @role(\App\Helpers\Constant::ADMIN_ROLE)
-                                @include('partials/admin-navigation')
-                            @else
-                                @include('partials/user-navigation')
-                            @endrole
-                        @endauth
-                    </ul>
-                </div>--}}
             </div>
         </nav>
+
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{session()->get('message')}}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
 
 

@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name'
+    ];
+
+    public function categoryProducts()
+    {
+        return $this->hasMany(CategoryProduct::class);
+    }
+
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, CategoryProduct::class, 'product_id', 'id');
+    }
 }

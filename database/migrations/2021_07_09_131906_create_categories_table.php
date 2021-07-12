@@ -15,15 +15,7 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->boolean('bmw');
-            $table->boolean('mercedes');
-            $table->boolean('fiat');
-            $table->boolean('gasoline');
-            $table->boolean('gasoline');
-            $table->boolean('saloon');
-            $table->boolean('suv');
-            $table->boolean('caravan');
-            $table->boolean('hatchback');
+            $table->string('name');
             $table->timestamps();
         });
     }

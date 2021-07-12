@@ -34,8 +34,4 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
     }
-
-    public function productsCreate(){
-        return $this->hasMany(Product::class, 'user_id', 'id');
-    }
 }

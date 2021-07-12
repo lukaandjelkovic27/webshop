@@ -32,7 +32,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
     //ProductController
     Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::get('products/{category}', [ProductController::class, 'indexCategory'])->name('category_products');
     Route::get('products/new', [ProductController::class, 'create'])->name('new-product');
+    Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
 
 });
 
