@@ -18,7 +18,7 @@ class Product extends Model
       'quantity',
     ];
 
-    public function user(){
+    public function userAdmin(){
         return $this->belongsTo(User::class);
     }
 

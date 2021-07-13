@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,10 +33,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
     //ProductController
     Route::get('products', [ProductController::class, 'index'])->name('products');
-    Route::get('products/{category}', [ProductController::class, 'indexCategory'])->name('category_products');
     Route::get('products/new', [ProductController::class, 'create'])->name('new-product');
+    Route::get('products/{category}', [ProductController::class, 'indexCategory'])->name('category_products');
+    Route::get('product/{product}', [ProductController::class, 'show'])->name('show_product');
+    Route::get('product/{product}/edit', [ProductController::class, 'edit'])->name('edit_product');
     Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
-
+    Route::put('product/{product}', [ProductController::class, 'update'])->name('update_product');
+    Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('delete_product');
+    Route::get('productCategory/{id}/edit', [ProductController::class, 'editProductCategory'])->name('edit_productCategory');
 });
 
 

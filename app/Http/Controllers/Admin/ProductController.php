@@ -13,18 +13,18 @@ class ProductController extends Controller
     {
         $products = Product::all();
         $categories = Category::all();
-        return view('admin.index')->with(['products' => $products, 'categories' => $categories]);
+        return view('admin.product.index')->with(['products' => $products, 'categories' => $categories]);
     }
 
     public function indexCategory(Category $category){
         $categories = Category::all();
-        return view('admin.index')->with(['products' => $category->products, 'categories' => $categories,'active_ctg' => $category->id]);
+        return view('admin.product.index')->with(['products' => $category->products, 'categories' => $categories,'active_ctg' => $category->id]);
     }
 
     public function create()
     {
         $categories = Category::get();
-        return view('admin.create')->with('categories', $categories);
+        return view('admin.product.create')->with('categories', $categories);
     }
 
     public function store(Request $request)
@@ -48,40 +48,45 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        //
+        return view('admin.product.show')->with('product', $product);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Product $product)
     {
-        //
+       /* $productId = Product::where('id', $product->id)->first();
+        return view('post.edit')->with('post', $postId);*/
+        $categories = Category::all();
+        return view('admin.product.edit')->with(['product' => $product, 'categories' => $categories ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
+    public function editProductCategory(Product $product, Category $category)
+    {
+        return view('admin.product.editProductCategory')->with(['product' => $product, 'category' => $category]);
+    }
+
     public function update(Request $request, Product $product)
     {
-        //
+        try {
+            $product->fill($request->all());
+            if ($request->has('image')) {
+                $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension(); //kako da obrisem staru sliku
+                $request->file('image')->storeAs('images', $newImageName, 'public');
+                $product->image_path = $newImageName;
+            }
+            $product->update();
+            return redirect()->route('admin.products')->with('message', 'Product edited successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Product $product)
     {
-        //
+        try {
+            $product->delete();
+            return redirect(route('admin.products'))->with('message', 'Product deleted successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
     }
 }

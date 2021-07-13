@@ -13,13 +13,13 @@ class Category extends Model
         'name'
     ];
 
-    public function categoryProducts()
+    /*public function categoryProducts()
     {
         return $this->hasMany(CategoryProduct::class);
-    }
+    }*/
 
     public function products()
     {
-        return $this->hasManyThrough(Product::class, CategoryProduct::class, 'product_id', 'id');
+        return $this->hasManyThrough(Product::class, CategoryProduct::class, 'category_id', 'id', 'id', 'product_id');
     }
 }
