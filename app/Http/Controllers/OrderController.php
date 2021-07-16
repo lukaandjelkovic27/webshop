@@ -14,7 +14,10 @@ class OrderController extends Controller
         try{
             $order = new Order;
             $order->user()->associate(auth()->user());
+            $order->cart()->associate($cart);
             $order->save();
+
+            /*$order->cart()->active = false;*/
 
             return back()->with('message', 'Povezano');
         } catch (\Exception $e) {
