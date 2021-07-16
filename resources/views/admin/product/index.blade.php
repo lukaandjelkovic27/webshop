@@ -23,7 +23,6 @@
             }
         </script>
         <div class="row">
-            {{--<div class="col-md-8">--}}
             @foreach($products as $product)
                 <div class="col-md-4 card">
                     <div class="product">
@@ -39,6 +38,11 @@
                             </div>
                             <div>
                                 <p>Price: {{$product->price}}</p>
+                            </div>
+                            <div>
+                                @foreach($product->categories as $category)
+                                    <span>#{{$category->name}}</span>
+                                @endforeach
                             </div>
                             <div>
                                 <a href="{{route('admin.edit_product', $product->id)}}"><button class="btn btn-warning btn-sm">Edit Product</button></a>

@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,20 +17,30 @@ use App\Http\Controllers\Admin\CategoryController;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
 Auth::routes();
 
-Route::get('/home', function () { return view('home'); } )->name('home');
+//GUEST
+Route::get('/', function (){ return view('user.home'); })->name('home');
+Route::get('/products', [HomeController::class, 'index'])->name('products');
+Route::get('/products/{category}', [HomeController::class, 'indexCategory'])->name('category_products');
+Route::get('/product/{product}', [HomeController::class, 'show'])->name('home.show');
 
+//USER
 Route::group([ 'prefix' => 'user', 'as' => 'user.', 'middleware' => ['auth']], function () {
     Route::get('/', [App\Http\Controllers\User\HomeController::class, 'index'])->name('home');
+    Route::get('/products', [HomeController::class, 'index'])->name('products');
+    Route::get('/products/{category}', [HomeController::class, 'indexCategory'])->name('category_products');
+    Route::get('/product/{product}', [HomeController::class, 'show'])->name('show_product');
+    //Cart Controller
+    Route::get('cart', [CartController::class, 'index'])->name('index_cart');
+    Route::post('cart/add-product/{product}', [CartController::class, 'addToCart'])->name('add_product');
+    Route::delete('cart/delete-product/{product}', [CartController::class, 'deleteFromCart'])->name('delete_product');
+    //Order Controller
+    Route::post('order/new-order/{cart}', [OrderController::class, 'sendOrder'])->name('send_order');
 });
 
 //ADMIN
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth','role:admin']], function () {
     //HomeController
     Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
     //ProductController
@@ -40,7 +52,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
     Route::put('product/{product}', [ProductController::class, 'update'])->name('update_product');
     Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('delete_product');
-    Route::get('productCategory/{id}/edit', [ProductController::class, 'editProductCategory'])->name('edit_productCategory');
+    Route::get('productCategory/{product}/edit', [ProductController::class, 'editProductCategory'])->name('edit_productCategory');
+    Route::delete('productCategory/{product}', [ProductController::class, 'destroyProductCategory'])->name('delete_productCategory');
+    Route::put('productCategory{product}', [ProductController::class, 'updateProductCategory'])->name('update_productCategory');
 });
 
 

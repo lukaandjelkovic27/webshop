@@ -7,17 +7,6 @@
                 <form action="{{route('admin.update_product', $product->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     {{method_field("PUT")}}
-                    <h1>Categories</h1>
-                    <div class="form-group">
-                        <label for="inputName">Choose product categories:</label>
-                        <br>
-                        @if(count($categories) > 0)
-                            @foreach($categories as $carCategory)
-                                <label for="car_name">{{$carCategory->name}}</label>
-                                <input type="checkbox" name="categories[]" id="inputName" value="{{$carCategory->id}}">
-                            @endforeach
-                        @endif
-                    </div>
                     <h1>Edit Product</h1>
                     <div class="form-group">
                         <label for="inputTitle">Name</label>

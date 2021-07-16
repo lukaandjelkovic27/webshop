@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class ProductController extends Controller
         return view('admin.product.create')->with('categories', $categories);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         try {
             $product = new Product;
@@ -53,18 +54,16 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-       /* $productId = Product::where('id', $product->id)->first();
-        return view('post.edit')->with('post', $postId);*/
-        $categories = Category::all();
-        return view('admin.product.edit')->with(['product' => $product, 'categories' => $categories ]);
+        return view('admin.product.edit')->with('product', $product);
     }
 
-    public function editProductCategory(Product $product, Category $category)
+    public function editProductCategory(Product $product)
     {
-        return view('admin.product.editProductCategory')->with(['product' => $product, 'category' => $category]);
+        $categories = Category::all();
+        return view('admin.product.editProductCategory')->with(['product' => $product,'productCategories' => $product->categories, 'categories'=>$categories]);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(StoreProductRequest $request, Product $product)
     {
         try {
             $product->fill($request->all());
@@ -80,11 +79,31 @@ class ProductController extends Controller
         }
     }
 
+    public function updateProductCategory(Request $request, Product $product){
+        try {
+            $product->categories()->detach();
+            $product->categories()->attach($request->categories);
+            return redirect(route('admin.products'))->with('message', 'Product Categories edited successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+    }
+
     public function destroy(Product $product)
     {
         try {
             $product->delete();
             return redirect(route('admin.products'))->with('message', 'Product deleted successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+    }
+
+    public function destroyProductCategory(Product $product)
+    {
+        try {
+            $product->categories()->detach();
+            return redirect(route('admin.products'))->with('message', 'Product categories deleted successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }

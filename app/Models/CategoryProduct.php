@@ -12,7 +12,7 @@ class CategoryProduct extends Model
     protected $table = 'category_product';
 
 
-   /* public function product(){
+    public function product(){
         return $this->belongsTo(Product::class, 'product_id', 'id');
-    }*/
+    }
 }
