@@ -6,7 +6,7 @@
             <div class="col-md-6">
                 <form action="{{route('admin.update_product', $product->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{method_field("PUT")}}
+                    @method('PUT')
                     <h1>Edit Product</h1>
                     <div class="form-group">
                         <label for="inputTitle">Name</label>

@@ -10,26 +10,16 @@
             </a>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Categories
+                    @if(isset($active_ctg))
+                        {{$active_ctg->name}}
+                    @else
+                        Categories
+                    @endif
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <form id="form-action" action="" method="GET">
-                        <select id="categories" onchange="setRoute(this.value)">
-                            @foreach(\App\Models\Category::all() as $category)
-                                @if(isset($active_ctg))
-                                    <option @if($active_ctg /*&& $active_ctg*/ === $category->id)  selected @endif value="{{$category->id}}"> {{$category->name}} </option>
-                                @else
-                                    <option  value="{{$category->id}}"> {{$category->name}} </option>
-                                @endif
-                            @endforeach
-                        </select>
-                        <button type="submit" class="btn btn-primary btn-sm">Go</button>
-                    </form>
-                    <script>
-                        function setRoute(id) {
-                            document.getElementById('form-action').setAttribute('action', '/products/' + id);
-                        }
-                    </script>
+                    @foreach(\App\Models\Category::all() as $category)
+                        <a class="dropdown-item" href="{{asset('products/'.$category->id)}}">{{$category->name}}</a>
+                    @endforeach
                 </div>
             </li>
             <li>

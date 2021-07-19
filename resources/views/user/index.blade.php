@@ -7,7 +7,7 @@
                 <div class="col-md-4 card">
                     <div class="product">
                         <div class="product-img-content" style="min-width: 100px">
-                            <a href="{{route('user.show_product', $product->id)}}">
+                            <a href="{{route('show_product', $product->id)}}">
                                 <img src="{{asset('/storage/images/' . $product->image_path)}}" class="post-image" style="width: 100%"/>
                             </a>
                         </div>

@@ -8,6 +8,9 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{route('admin.new-product')}}">New Product<span class="sr-only">(current)</span></a>
     </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('admin.orders.list')}}">Orders list<span class="sr-only">(current)</span></a>
+    </li>
 </ul>
 <ul class="navbar-nav ml-auto">
     <li class="nav-item dropdown">

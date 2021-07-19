@@ -18,10 +18,12 @@ class Cart extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
+
     public function quantity($product_id){
         return $this->hasMany(CartProduct::class)->where('product_id',$product_id)->first()->quantity;
     }
-    public function updateQuantity($product_id,$quantity){
+
+    public function updateQuantity($product_id, $quantity){
         return $this->hasMany(CartProduct::class)->where('product_id',$product_id)->first()->update(['quantity' => $quantity]);
     }
 
@@ -29,5 +31,6 @@ class Cart extends Model
     {
         return $this->hasOne(Order::class);
     }
+
 
 }

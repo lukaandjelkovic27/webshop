@@ -19,7 +19,11 @@ class ProductController extends Controller
 
     public function indexCategory(Category $category){
         $categories = Category::all();
-        return view('admin.product.index')->with(['products' => $category->products, 'categories' => $categories,'active_ctg' => $category->id]);
+        return view('admin.product.index')->with([
+            'products' => $category->products,
+            'categories' => $categories,
+            'active_ctg' => $category
+        ]);
     }
 
     public function create()
@@ -36,10 +40,12 @@ class ProductController extends Controller
             $product->save();
             $product->categories()->attach($request->categories);
 
-            $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension();
-            $request->file('image')->storeAs('images', $newImageName, 'public');
-            $product->image_path = $newImageName;
-            $product->update();
+            if ($request->hasFile('image')) {
+                $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension();
+                $request->file('image')->storeAs('images', $newImageName, 'public');
+                $product->image_path = $newImageName;
+                $product->update();
+            }
 
             return redirect()->route('admin.new-product')->with('message', 'Product posted successfully');
         } catch (\Exception $e) {
@@ -60,14 +66,18 @@ class ProductController extends Controller
     public function editProductCategory(Product $product)
     {
         $categories = Category::all();
-        return view('admin.product.editProductCategory')->with(['product' => $product,'productCategories' => $product->categories, 'categories'=>$categories]);
+        return view('admin.product.editProductCategory')->with([
+            'product' => $product,
+            'productCategories' => $product->categories,
+            'categories'=>$categories
+        ]);
     }
 
     public function update(StoreProductRequest $request, Product $product)
     {
         try {
             $product->fill($request->all());
-            if ($request->has('image')) {
+            if ($request->hasFile('image')) {
                 $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension(); //kako da obrisem staru sliku
                 $request->file('image')->storeAs('images', $newImageName, 'public');
                 $product->image_path = $newImageName;
@@ -81,8 +91,8 @@ class ProductController extends Controller
 
     public function updateProductCategory(Request $request, Product $product){
         try {
-            $product->categories()->detach();
-            $product->categories()->attach($request->categories);
+//            $product->categories()->detach();
+            $product->categories()->sync($request->categories);
             return redirect(route('admin.products'))->with('message', 'Product Categories edited successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
